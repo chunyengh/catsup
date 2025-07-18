@@ -132,30 +132,43 @@ def fetchoneid(pmid, subject):
 
         articleDic['abstract'] = abstract_text
 
-        journal_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal')
-        # journal_list:[{
-        #   "JournalIssue":{"Volume":"59", "PubDate":{"Year": "2023", "Month": "Sep"}},
-        #   "Title":"Food and chem.."
-        # }]
-        for journal in journal_list:
-            for key, value in journal.items():
-                if (key == 'Title'):
-                    articleDic['journalIssueTitle'] = value
-                else:
-                    issue = json.loads(value)
-                    issueVolume = issue['Volume']
-                    issuePubDateYear = issue['PubDate']['Year']
-                    articleDic['journalIssueVolume'] = issueVolume
-                    articleDic['journalIssuePubDateYear'] = issuePubDateYear
+        journal_issue_title_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal/Title')
+        for journal_issue_title in journal_issue_title_list:
+           # cylogger.info(f'tag:{journal_issue_title.tag}, text:{journal_issue_title.text}')
+            articleDic['journalIssueTitle'] = journal_issue_title.text
+        
+        journal_issue_volume_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal/JournalIssue/Volume')
+        for journal_issue_volume in journal_issue_volume_list:
+            # cylogger.info(f'tag:{journal_issue_volume.tag}, text:{journal_issue_volume.text}')
+            articleDic['journalIssueVolume'] = journal_issue_volume.text
+        
+        # working example:
+        # journal_issue_pubdate_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal/JournalIssue/PubDate')
+        # for journal_issue_pubdate in journal_issue_pubdate_list:
+        #    for child in journal_issue_pubdate:
+        #        cylogger.info(f'child tag:{child.tag}, child text:{child.text}')
 
-        author_list = root.findall('.//Author')
+        journal_issue_pubdateyear_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal/JournalIssue/PubDate/Year')
+        for journal_issue_pubdateyear in journal_issue_pubdateyear_list:
+            #cylogger.info(f'tag:{journal_issue_pubdateyear.tag}, text:{journal_issue_pubdateyear.text}')
+            articleDic['journalIssuePubDateYear'] = journal_issue_pubdateyear.text
+
+        author_list = root.findall('./PubmedArticle/MedlineCitation/Article/AuthorList/Author')
+        #authorDicList=[{LastName:ln, Initials:in}]
         authorDicList = []
         for author in author_list:
             authorDic = {}
-            for key, value in author.items():
-                if ((key == 'LastName') | (key == 'Initials')):
-                    authorDic[{key}] = value
-                    cylogger.info(f'authorDic:{authorDic}')
+            for childauthor in author:
+                #cylogger.info(f'childauthor:{childauthor}')
+                #cylogger.info(f'childauthor tag:{childauthor.tag}, childauthor text:{childauthor.text}')
+                if (childauthor.tag == 'LastName'):
+                    #cylogger.info(f'lastname:{childauthor.text}')
+                    authorDic['LastName'] = childauthor.text
+                elif (childauthor.tag == 'Initials'):
+                    #cylogger.info(f'initials:{childauthor.text}')
+                    authorDic['Initials'] = childauthor.text
+         
+            authorDicList.append(authorDic)    
         articleDic['authorList'] = authorDicList
         
         articleId_list = root.findall('./PubmedArticle/PubmedData/ArticleIdList/ArticleId')
@@ -164,23 +177,19 @@ def fetchoneid(pmid, subject):
         #pmcid depends on fulltext availability in pmc
         #doi:publishers reference, usually included
         #pii:biom...
-
-        if (len(articleId_list)) == 0 :
-            cylogger.warning("something wrong, no ArticleId element returned")
        
-        else:
-            articleIdDicList = []
-            #[{'pubmed':'123'},{'pmc':'345'},{'doi':'js/01'}]
-            for articleId in articleId_list:
-                articleIdDic = {}
-                for key, value in articleId.items():
-                # print(f"key:{key}, value:{value} of articleId attribute")
-                # example: key:IdType; value:pubmed; articleIdtext = '12345'
-                    articleIdDic['type']= {value}
-                    articleIdDic['id']= {articleId.text}
-                    #articleDic[value] = articleId.text
-                articleIdDicList.append(articleIdDic)
-            articleDic['articleIdList'] = articleIdDicList
+        articleIdDicList = []
+        #[{'type':'pubmed', 'id':'123'},{'type':'pmc', 'id':'345'},{'type';'doi', 'id':'js/01'}]
+        for articleId in articleId_list:
+            articleIdDic = {}
+            for key, value in articleId.items():
+            # print(f"key:{key}, value:{value} of articleId attribute, etc.attribute:"IdType")
+                articleIdDic['type']= value
+                articleIdDic['id']= articleId.text
+                #cylogger.info(f'articleIdDic:{articleIdDic}')
+            articleIdDicList.append(articleIdDic)
+            #cylogger.info(f'articleIdDicList:{articleIdDicList}')
+        articleDic['articleIdList'] = articleIdDicList
 
         return articleDic 
          

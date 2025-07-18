@@ -83,7 +83,6 @@ def esearch(search_query, retstart, retmax):
 
     count = 0
     idlist = []
-   
     try:
        
         #time.sleep(1.0) # make get(url) frequency less than 3/s
