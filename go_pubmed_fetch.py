@@ -89,10 +89,13 @@ def fetchoneid(pmid, subject):
         # {"LastName":"ln", "ForeName":"fn", "Initials":"in"}
         #]
         #xpath usage: root.findall(xpath); not root.find(xpath)
-        #root:= PubmedArticleSet    
-        #article_xpath_base = './PubmedArticle/MedlineCitation/Article'
-        #article_elem_list = root.findall(article_xpath_base)
-        #above return all "Article" elem in a list under:PubmedArticle/MedlineCitation/"
+        #root:= PubmedArticleSet 
+        # if use like: root.findall('.//article)
+        #    will return all article elem in a list under PubmedArticleSet   
+        #if use like: article_xpath_base = './PubmedArticle/MedlineCitation/Article'
+        #             article_elem_list = root.findall(article_xpath_base)
+        #   then the return will be all "Article" elem in a list 
+        #   under:PubmedArticle/MedlineCitation/"
         #in this data only one element:Article will be returned
             
               
@@ -129,6 +132,32 @@ def fetchoneid(pmid, subject):
 
         articleDic['abstract'] = abstract_text
 
+        journal_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal')
+        # journal_list:[{
+        #   "JournalIssue":{"Volume":"59", "PubDate":{"Year": "2023", "Month": "Sep"}},
+        #   "Title":"Food and chem.."
+        # }]
+        for journal in journal_list:
+            for key, value in journal.items():
+                if (key == 'Title'):
+                    articleDic['journalIssueTitle'] = value
+                else:
+                    issue = json.loads(value)
+                    issueVolume = issue['Volume']
+                    issuePubDateYear = issue['PubDate']['Year']
+                    articleDic['journalIssueVolume'] = issueVolume
+                    articleDic['journalIssuePubDateYear'] = issuePubDateYear
+
+        author_list = root.findall('.//Author')
+        authorDicList = []
+        for author in author_list:
+            authorDic = {}
+            for key, value in author.items():
+                if ((key == 'LastName') | (key == 'Initials')):
+                    authorDic[{key}] = value
+                    cylogger.info(f'authorDic:{authorDic}')
+        articleDic['authorList'] = authorDicList
+        
         articleId_list = root.findall('./PubmedArticle/PubmedData/ArticleIdList/ArticleId')
         #id_elem_list will have 1-many(list 12 IdTypes) ArticleIds returned by the findall call
         #pubmed:pmid always included
