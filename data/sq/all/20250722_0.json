@@ -1,0 +1,38 @@
+[
+    {
+        "articleIndex": "0",
+        "selectedTestInfoObj": {
+            "articleTitle": "paper title",
+            "authorObjArray": [
+                {
+                    "Initials": "NJ",
+                    "LastName": "Szabo"
+                },
+                {
+                    "Initials": "RA",
+                    "LastName": "Matulka"
+                },
+                {
+                    "Initials": "T",
+                    "LastName": "Chan"
+                }
+            ],
+            "journalInfo": "Food and chemical toxi(2013)",
+            "articleIdObjArray": [
+                {
+                    "id": "23733102",
+                    "type": "pubmed"
+                },
+                {
+                    "id": "10.1016/j.fct.2013.05.035",
+                    "type": "doi"
+                },
+                {
+                    "id": "S0278-6915(13)00341-4",
+                    "type": "pii"
+                }
+            ],
+            "articleAbstract": "paper abstract"
+        }
+    }
+]

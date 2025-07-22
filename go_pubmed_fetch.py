@@ -13,7 +13,7 @@ import xmltodict
 import os
 from cylogger import cylogger
 
-def fetchoneid(pmid, subject):
+def fetchoneid(pmid):
     base_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/'
     eutil = 'efetch.fcgi?'
     #fetch pmid to 'db=pubmed' to get info:
@@ -130,7 +130,8 @@ def fetchoneid(pmid, subject):
                 abstract_text += attr_prespace + elem_attr_text + ' ' + ''.join(abstract_elem.itertext())
                 #print(f"aat:{article_abstract_text}")
 
-        articleDic['abstract'] = abstract_text
+        #articleDic['abstract'] = abstract_text
+        articleDic['abstract'] = 'test abstract abstract abstract abstract'
 
         journal_issue_title_list = root.findall('./PubmedArticle/MedlineCitation/Article/Journal/Title')
         for journal_issue_title in journal_issue_title_list:

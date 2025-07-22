@@ -1,0 +1,50 @@
+[
+    {
+        "articleIndex": "0",
+        "selectedTestInfoObj": {
+            "articleTitle": "Marine Ingredients for Sensitive Skin: Market Overview.",
+            "authorObjArray": [
+                {
+                    "Initials": "MS",
+                    "LastName": "Ferreira"
+                },
+                {
+                    "Initials": "DISP",
+                    "LastName": "Resende"
+                },
+                {
+                    "Initials": "JMS",
+                    "LastName": "Lobo"
+                },
+                {
+                    "Initials": "E",
+                    "LastName": "Sousa"
+                },
+                {
+                    "Initials": "IF",
+                    "LastName": "Almeida"
+                }
+            ],
+            "journalInfo": "Marine drugs(2021)",
+            "articleIdObjArray": [
+                {
+                    "id": "34436303",
+                    "type": "pubmed"
+                },
+                {
+                    "id": "PMC8398991",
+                    "type": "pmc"
+                },
+                {
+                    "id": "10.3390/md19080464",
+                    "type": "doi"
+                },
+                {
+                    "id": "md19080464",
+                    "type": "pii"
+                }
+            ],
+            "articleAbstract": "test abstract abstract abstract abstract"
+        }
+    }
+]

@@ -71,6 +71,7 @@ def esearch(search_query, retstart, retmax):
     #andboolean = '+AND+' #input
     #pubdate = '2000:2025[pdat]' #in a range of 2000 to 2025
     #pubdate = '2014[pdat]'
+    cylogger.debug(f'retstart={retstart}, retmax={retmax}')
     ret_range_str = '&retstart=' + retstart + '&retmax=' + retmax
   
     retmodestr = '&retmode=' + retmode
@@ -79,10 +80,12 @@ def esearch(search_query, retstart, retmax):
     filter = 'ffrft[filter]' # 'ffrft[filter]' : free fulltext[filter]
   
     esearch_url = urlstr + dbstr + ret_range_str + retmodestr + querystr
+   
     cylogger.debug(f'esearch_url: {esearch_url}')
-
+    
     count = 0
     idlist = []
+  
     try:
        
         #time.sleep(1.0) # make get(url) frequency less than 3/s
